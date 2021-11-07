@@ -1,0 +1,4 @@
+# download data dir
+data/
+# local environment
+.idea/
