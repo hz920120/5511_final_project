@@ -137,7 +137,7 @@ def make_video(env, TrainNet):
 
 def main():
     env = gym.make('CartPole-v0')
-    gamma = 0.99
+    gamma = 0.75
     copy_step = 25
     num_states = len(env.observation_space.sample())
     num_actions = env.action_space.n
@@ -152,7 +152,7 @@ def main():
 
     TrainNet = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
     TargetNet = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
-    N = 500
+    N = 200
     total_rewards = np.empty(N)
     epsilon = 0.99
     decay = 0.9999
