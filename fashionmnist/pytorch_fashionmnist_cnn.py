@@ -1,4 +1,6 @@
 #import lib
+import datetime
+
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
@@ -230,8 +232,10 @@ opt = optim.Adam(net.parameters())
 time
 loss_arr = []
 loss_epoch_arr = []
-max_epochs = 10 #epoch count
+max_epochs = 2 #epoch count
 
+
+starttime = datetime.datetime.now()
 for epoch in range(max_epochs):
 
     for i, data in enumerate(trainloader, 0):
@@ -251,7 +255,14 @@ for epoch in range(max_epochs):
 
     loss_epoch_arr.append(loss.item())
 
-    print('Epoch: %d/%d, Test acc: %0.2f, Train acc: %0.2f' % (epoch, max_epochs, evaluation(testloader), evaluation(trainloader)))
+    print('Epoch: %d/%d, Test acc: %0.2f, Train acc: %0.2f' % (epoch+1, max_epochs, evaluation(testloader), evaluation(trainloader)))
+
+endtime = datetime.datetime.now()
+seconds = (endtime - starttime).seconds
+m, s = divmod(seconds, 60)
+h, m = divmod(m, 60)
+print("total training time : %02d:%02d:%02d" % (h, m, s))
+
 
 print('Test acc: %0.2f, Train acc: %0.2f' % (evaluation(testloader), evaluation(trainloader)))
 plt.plot(loss_epoch_arr)

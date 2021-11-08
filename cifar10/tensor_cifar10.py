@@ -1,3 +1,5 @@
+import datetime
+
 import tensorflow as tf
 
 from tensorflow.keras import datasets, layers, models
@@ -47,8 +49,16 @@ model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
-history = model.fit(train_images, train_labels, epochs=10, batch_size=32,
+
+starttime = datetime.datetime.now()
+history = model.fit(train_images, train_labels, epochs=1, batch_size=32,
                     validation_data=(test_images, test_labels))
+
+endtime = datetime.datetime.now()
+seconds = (endtime - starttime).seconds
+m, s = divmod(seconds, 60)
+h, m = divmod(m, 60)
+print("total training time : %02d:%02d:%02d" % (h, m, s))
 
 plt.plot(history.history['accuracy'], label='accuracy')
 plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
@@ -58,5 +68,3 @@ plt.ylim([0.5, 1])
 plt.legend(loc='lower right')
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
-
-print(test_acc)

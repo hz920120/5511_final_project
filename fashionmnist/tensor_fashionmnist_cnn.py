@@ -1,3 +1,5 @@
+import datetime
+
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, models
@@ -141,8 +143,16 @@ model.compile(optimizer='adam',
 # in validation dataset each time cross-validation runs
 
 # validation split=0.1 means a validation dataset of size of 10% is created from the training dataset for cross validation
+starttime = datetime.datetime.now()
 
-model.fit(train_images_norm, train_labels, epochs=10, batch_size=512, shuffle=True, validation_split=0.1)
+#training
+model.fit(train_images_norm, train_labels, epochs=1, batch_size=512, shuffle=True, validation_split=0.1)
+
+endtime = datetime.datetime.now()
+seconds = (endtime - starttime).seconds
+m, s = divmod(seconds, 60)
+h, m = divmod(m, 60)
+print("total training time : %02d:%02d:%02d" % (h, m, s))
 
 # we are using the normalized input data
 test_loss, test_accuracy = model.evaluate(test_images_norm, test_labels)

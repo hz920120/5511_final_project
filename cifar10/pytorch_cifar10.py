@@ -1,3 +1,5 @@
+import datetime
+
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -22,8 +24,6 @@ classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 #print("part 1")
 ########################################################################
-import matplotlib.pyplot as plt
-import numpy as np
 
 # functions to show an image
 '''
@@ -77,13 +77,14 @@ class Net(nn.Module):
 net = Net()
 #print("part 3")
 ########################################################################
+starttime = datetime.datetime.now()
 
 import torch.optim as optim
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-for epoch in range(10):  # loop over the dataset multiple times
+for epoch in range(1):  # loop over the dataset multiple times
 
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
@@ -105,11 +106,14 @@ for epoch in range(10):  # loop over the dataset multiple times
             print('[%d, %5d] loss: %.3f' %
                   (epoch + 1, i + 1, running_loss / 2000))
             running_loss = 0.0
+endtime = datetime.datetime.now()
+seconds = (endtime - starttime).seconds
+m, s = divmod(seconds, 60)
+h, m = divmod(m, 60)
+print("total training time : %02d:%02d:%02d" % (h, m, s))
 
-#print('Finished Training')
 
-
-PATH = './cifar_net.pth'
+PATH = '../data/cifar10/cifar_net.pth'
 torch.save(net.state_dict(), PATH)
 
 #print("part 4")
