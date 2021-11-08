@@ -1,0 +1,3 @@
+data_path: ../data/fashionmnist/
+epochs: 5
+batch_size: 32

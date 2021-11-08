@@ -9,11 +9,21 @@ plt.figure(figsize = (3,3))
 import torchvision
 import torchvision.transforms as transforms
 
-import time
+import yaml
+
+yamlPath = "config.yaml"
+
+config = []
+with open(yamlPath,'rb') as f:
+    config = yaml.safe_load(f)
+
+data_path = config['data_path']
+epochs = config['epochs']
+batch_size = config['batch_size']
 
 #setup training set
 #transforming the PIL Image to tensors
-trainset = torchvision.datasets.FashionMNIST(root = "../data/fashionmnist", train = True, download = True, transform = transforms.ToTensor())
+trainset = torchvision.datasets.FashionMNIST(root = data_path, train = True, download = True, transform = transforms.ToTensor())
 
 #loading the training data from trainset
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle = True)
@@ -197,12 +207,10 @@ max_values, pred_class = torch.max(out.data, 1)
 print(pred_class)
 
 #increase the batch size
-batch_size = 512
-
 #download the data again and set the train, test loader with different batch size
-trainset = torchvision.datasets.FashionMNIST(root='./data', train=True, download=True, transform=transforms.ToTensor())
+trainset = torchvision.datasets.FashionMNIST(root=data_path, train=True, download=True, transform=transforms.ToTensor())
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True)
-testset = torchvision.datasets.FashionMNIST(root='./data', train=False, download=True, transform=transforms.ToTensor())
+testset = torchvision.datasets.FashionMNIST(root=data_path, train=False, download=True, transform=transforms.ToTensor())
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False)
 
 def evaluation(dataloader):
@@ -229,14 +237,12 @@ loss_fn = nn.CrossEntropyLoss()
 #using the adam optimizer for backpropagation
 opt = optim.Adam(net.parameters())
 
-time
 loss_arr = []
 loss_epoch_arr = []
-max_epochs = 2 #epoch count
 
 
 starttime = datetime.datetime.now()
-for epoch in range(max_epochs):
+for epoch in range(epochs):
 
     for i, data in enumerate(trainloader, 0):
 
@@ -255,7 +261,7 @@ for epoch in range(max_epochs):
 
     loss_epoch_arr.append(loss.item())
 
-    print('Epoch: %d/%d, Test acc: %0.2f, Train acc: %0.2f' % (epoch+1, max_epochs, evaluation(testloader), evaluation(trainloader)))
+    print('Epoch: %d/%d, Test acc: %0.2f, Train acc: %0.2f' % (epoch+1, epochs, evaluation(testloader), evaluation(trainloader)))
 
 endtime = datetime.datetime.now()
 seconds = (endtime - starttime).seconds

@@ -3,14 +3,22 @@ import datetime
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, models
-from tensorflow.keras.models import load_model
-import os
+import yaml
+
+yamlPath = "config.yaml"
+
+config = []
+with open(yamlPath,'rb') as f:
+    config = yaml.safe_load(f)
+
+data_path = config['data_path']
+epochs = config['epochs']
+batch_size = config['batch_size']
+
 
 print(tf.version)
 print(tf.keras.__version__)
 
-import numpy as np
-import matplotlib.pyplot as plt
 
 # Fashion - MNIST - https://github.com/zalandoresearch/fashion-mnist
 fashion_mnist = keras.datasets.fashion_mnist
@@ -146,7 +154,7 @@ model.compile(optimizer='adam',
 starttime = datetime.datetime.now()
 
 #training
-model.fit(train_images_norm, train_labels, epochs=1, batch_size=512, shuffle=True, validation_split=0.1)
+model.fit(train_images_norm, train_labels, epochs=epochs, batch_size=batch_size, shuffle=True, validation_split=0.1)
 
 endtime = datetime.datetime.now()
 seconds = (endtime - starttime).seconds

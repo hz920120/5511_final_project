@@ -3,21 +3,30 @@ import datetime
 import torch
 import torchvision
 import torchvision.transforms as transforms
+import yaml
+
+yamlPath = "config.yaml"
+
+config = []
+with open(yamlPath,'rb') as f:
+    config = yaml.safe_load(f)
+
+data_path = config['data_path']
+epochs = config['epochs']
+batch_size = config['batch_size']
 
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-batch_size = 4
-
-trainset = torchvision.datasets.CIFAR10(root='../data/cifar10', train=True,
+trainset = torchvision.datasets.CIFAR10(root=data_path, train=True,
                                         download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
                                           shuffle=True, num_workers=0)
 
-testset = torchvision.datasets.CIFAR10(root='../data/cifar10', train=False,
+testset = torchvision.datasets.CIFAR10(root=data_path, train=False,
                                        download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
+testloader = torch.utils.data.DataLoader(testset, batch_size=4,
                                          shuffle=False, num_workers=0)
 
 classes = ('plane', 'car', 'bird', 'cat',
@@ -82,9 +91,9 @@ starttime = datetime.datetime.now()
 import torch.optim as optim
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimizer = optim.SGD(net.parameters(),lr=0.001, momentum=0.9)
 
-for epoch in range(1):  # loop over the dataset multiple times
+for epoch in range(epochs):  # loop over the dataset multiple times
 
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
@@ -113,7 +122,7 @@ h, m = divmod(m, 60)
 print("total training time : %02d:%02d:%02d" % (h, m, s))
 
 
-PATH = '../data/cifar10/cifar_net.pth'
+PATH = data_path + 'cifar_net.pth'
 torch.save(net.state_dict(), PATH)
 
 #print("part 4")

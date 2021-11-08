@@ -1,6 +1,18 @@
 import datetime
 
 import tensorflow as tf
+import yaml
+
+yamlPath = "config.yaml"
+
+config = []
+with open(yamlPath,'rb') as f:
+    config = yaml.safe_load(f)
+
+data_path = config['data_path']
+epochs = config['epochs']
+batch_size = config['batch_size']
+
 
 from tensorflow.keras import datasets, layers, models
 import matplotlib.pyplot as plt
@@ -51,7 +63,7 @@ model.compile(optimizer='adam',
 
 
 starttime = datetime.datetime.now()
-history = model.fit(train_images, train_labels, epochs=1, batch_size=32,
+history = model.fit(train_images, train_labels, epochs=epochs, batch_size=batch_size,
                     validation_data=(test_images, test_labels))
 
 endtime = datetime.datetime.now()
